@@ -14,5 +14,3 @@ from .ACmix import *
 from .ELA import *
 from .TripletAttention import *
 from .DySample import *
-from .CirculantAttention import *
-from .BinaryAttention import *
