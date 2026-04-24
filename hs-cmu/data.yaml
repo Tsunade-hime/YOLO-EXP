@@ -1,0 +1,21 @@
+type: dataset
+task: detect
+name: HS CMU
+description: ''
+bytes: 182739465
+url: https://platform.ultralytics.com/tsunade/datasets/hs-cmu
+version: latest
+created_at: '2026-04-02T12:37:01.597Z'
+updated_at: '2026-04-24T05:26:42.939Z'
+names:
+  0: SM
+  1: EC
+  2: EP
+  3: EPH
+  4: EH
+  5: IFB
+  6: CP
+  7: AHE
+test: images/test
+train: images/train
+val: images/val
