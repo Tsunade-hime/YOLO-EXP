@@ -17,5 +17,5 @@ from .C2f_MSBlock import *
 from .C2f_HGBlock import *
 from .RFAConv import *
 from .Sonic import *
-
+from .C3_Sonic import *
 
