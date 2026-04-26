@@ -33,11 +33,11 @@ backbone:
 
 # YOLO11n head
 head:
-  - [-1, 1, nn.Upsample, [None, 2, "nearest"]]
+  - [-1, 1, DySample, []]
   - [[-1, 6], 1, Concat, [1]] # cat backbone P4
   - [-1, 2, C3_Sonic, [512, False]] # 13
 
-  - [-1, 1, nn.Upsample, [None, 2, "nearest"]]
+  - [-1, 1, DySample, []]
   - [[-1, 4], 1, Concat, [1]] # cat backbone P3
   - [-1, 2, C3_Sonic, [256, False]] # 16 (P3/8-small)
 
