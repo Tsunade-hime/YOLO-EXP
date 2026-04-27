@@ -1669,16 +1669,16 @@ def parse_model(d, ch, verbose=True):
     # ✅ 注意力模块
     # attn_modules = frozenset({SE, CA,})  # 逐步加
     attn_modules = frozenset({SE, ECA, CA, SimAM, SK, BAM, A2, SLAM,
-                              TripletAttention, CBAM, GAM, SCSA, EMA, ACmix, ELA, DySample, GLFA})  # 逐步加
+                              TripletAttention, CBAM, GAM, SCSA, EMA, ACmix, ELA, DySample, GLFA, HoGEdgeGateConv})  # 逐步加
     
     # ✅ 变种卷积模块
     conv_modules = frozenset({SPDConv, LAE, MSBlock, FasterBlock, RFEM, FCM,PConv,
                               CAB, MSCAM, SCConv, C3GhostExp, C3XExp, C3TRExp,
                               HGBlockExp, C3SCConvExp, C3FasterBlockExp, C2fMSBlockExp, C2fHGBlockExp,
-                              RFAConv, RFCAConv, RFCBAMConv, Sonic, C3_Sonic})
+                              RFAConv, RFCAConv, RFCBAMConv, Sonic, C3_Sonic, C3_HoGEdgeGate})
     # 后续所有 __init__(c1, c2, n=1, ...) 的复合模块
     conv_repeat_modules = frozenset({C3GhostExp, C3XExp, C3TRExp, HGBlockExp, C3SCConvExp,
-                                     C3FasterBlockExp, C2fMSBlockExp, C2fHGBlockExp, C3_Sonic})
+                                     C3FasterBlockExp, C2fMSBlockExp, C2fHGBlockExp, C3_Sonic, C3_HoGEdgeGate})
 
     # ✅ 变种SPP模块
     spp_modules = frozenset({SE_SPPF, SPPF_LSKA, DBSPPF, PMHSA, ASPP})  # 逐步加
