@@ -17,3 +17,4 @@ from .DySample import *
 from .LaSEA import GLFA
 from .HoGEdgeGateConv import *
 from .C3_HoGEdgeGate import C3_HoGEdgeGate
+from .C2f_GLFA import C2f_GLFA
