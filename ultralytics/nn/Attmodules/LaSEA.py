@@ -41,7 +41,7 @@ def shuffleTensor(Feature: Tensor, Mode: int=1) -> Tensor:
         Output.append(f)
     return Output
 class AdaptiveAvgPool2d(nn.AdaptiveAvgPool2d):
-    def __init__(self, output_size: int or tuple=1):
+    def __init__(self, output_size: int | tuple=1):
         super(AdaptiveAvgPool2d, self).__init__(output_size=output_size)
 
     def profileModule(self, Input: Tensor):
@@ -49,7 +49,7 @@ class AdaptiveAvgPool2d(nn.AdaptiveAvgPool2d):
         return Output, 0.0, 0.0
 
 class AdaptiveMaxPool2d(nn.AdaptiveMaxPool2d):
-    def __init__(self, output_size: int or tuple=1):
+    def __init__(self, output_size: int | tuple=1):
         super(AdaptiveMaxPool2d, self).__init__(output_size=output_size)
 
     def profileModule(self, Input: Tensor):
