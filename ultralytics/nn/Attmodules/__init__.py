@@ -22,3 +22,4 @@ from .PFG import *
 from .C2f_PFG import C2f_PFG
 from .MSEF import MSEFBlock
 from .C2f_MSEF import C2f_MSEF
+from .C3_PFG import C3_PFG
