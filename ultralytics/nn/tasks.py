@@ -1676,11 +1676,11 @@ def parse_model(d, ch, verbose=True):
                               CAB, MSCAM, SCConv, C3GhostExp, C3XExp, C3TRExp,
                               HGBlockExp, C3SCConvExp, C3FasterBlockExp, C2fMSBlockExp, C2fHGBlockExp,
                               RFAConv, RFCAConv, RFCBAMConv, Sonic, C3_Sonic, C3_HoGEdgeGate, C2f_GLFA, C2f_PFG, C2f_MSEF, C2f_Sonic,
-                              C3_PFG, C3SCTRExp})
+                              C3_PFG})
     # 后续所有 __init__(c1, c2, n=1, ...) 的复合模块
     conv_repeat_modules = frozenset({C3GhostExp, C3XExp, C3TRExp, HGBlockExp, C3SCConvExp,
                                      C3FasterBlockExp, C2fMSBlockExp, C2fHGBlockExp, C3_Sonic, C3_HoGEdgeGate, C2f_GLFA, C2f_PFG, C2f_MSEF, C2f_Sonic,
-                                     C3_PFG, C3SCTRExp})
+                                     C3_PFG})
 
     # ✅ 变种SPP模块
     spp_modules = frozenset({SE_SPPF, SPPF_LSKA, DBSPPF, PMHSA, ASPP})  # 逐步加
