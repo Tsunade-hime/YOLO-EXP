@@ -19,3 +19,4 @@ from .RFAConv import *
 from .Sonic import *
 from .C3_Sonic import *
 from .C2f_Sonic import C2f_Sonic
+from .C3_SCTR import C3SCTRExp
