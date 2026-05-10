@@ -21,3 +21,4 @@ from .C3_Sonic import *
 from .C2f_Sonic import C2f_Sonic
 from .GMRConv import GMR_Conv2d
 from .C2f_GMR import C2fGMR
+from .C2f_RFCA import C2fRFCA
