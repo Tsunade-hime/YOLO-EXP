@@ -1669,7 +1669,7 @@ def parse_model(d, ch, verbose=True):
     # ✅ 注意力模块
     # attn_modules = frozenset({SE, CA,})  # 逐步加
     attn_modules = frozenset({SE, ECA, CA, SimAM, SK, BAM, A2, SLAM,
-                              TripletAttention, CBAM, GAM, SCSA, EMA, ACmix, ELA, DySample, GLFA, HoGEdgeGateConv, PFG, MSEFBlock})  # 逐步加
+                              TripletAttention, CBAM, GAM, SCSA, EMA, ACmix, ELA, DySample, GLFA, PFG, MSEFBlock})  # 逐步加
     
     # ✅ 变种卷积模块
     conv_modules = frozenset({SPDConv, LAE, MSBlock, FasterBlock, RFEM, FCM,PConv,
