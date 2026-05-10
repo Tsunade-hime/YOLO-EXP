@@ -15,7 +15,6 @@ from .ELA import *
 from .TripletAttention import *
 from .DySample import *
 from .LaSEA import GLFA
-from .HoGEdgeGateConv import *
 from .C2f_GLFA import C2f_GLFA
 from .PFG import *
 from .C2f_PFG import C2f_PFG
