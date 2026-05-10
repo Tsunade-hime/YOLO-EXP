@@ -34,37 +34,7 @@ class RFAConv(nn.Module): # 基于Group Conv实现的RFAConv
         conv_data = rearrange(weighted_data, 'b c (n1 n2) h w -> b c (h n1) (w n2)', n1=self.kernel_size, # b c k**2 h w ->  b c h*k w*k
                               n2=self.kernel_size)
         return self.conv(conv_data)
-
-
-class RFAConv(nn.Module): # 基于Unfold实现的RFAConv
-    def __init__(self, in_channel, out_channel, kernel_size=3):
-        super().__init__()
-        self.kernel_size = kernel_size
-        self.unfold = nn.Unfold(kernel_size=(kernel_size, kernel_size), padding=kernel_size // 2)
-        self.get_weights = nn.Sequential(
-            nn.Conv2d(in_channel * (kernel_size ** 2), in_channel * (kernel_size ** 2), kernel_size=1,
-                      groups=in_channel),
-            nn.BatchNorm2d(in_channel * (kernel_size ** 2)))
-
-        self.conv = nn.Conv2d(in_channel, out_channel, kernel_size=kernel_size, padding=0, stride=kernel_size)
-        self.bn = nn.BatchNorm2d(out_channel)
-        self.act = nn.ReLU()
-
-    def forward(self, x):
-        b, c, h, w = x.shape
-        unfold_feature = self.unfold(x)  # 获得感受野空间特征  b c*kernel**2,h*w
-        x = unfold_feature
-        data = unfold_feature.unsqueeze(-1)
-        weight = self.get_weights(data).view(b, c, self.kernel_size ** 2, h, w).permute(0, 1, 3, 4, 2).softmax(-1)
-        weight_out = rearrange(weight, 'b c h w (n1 n2) -> b c (h n1) (w n2)', n1=self.kernel_size, n2=self.kernel_size) # b c h w k**2 -> b c h*k w*k
-        receptive_field_data = rearrange(x, 'b (c n1) l -> b c n1 l', n1=self.kernel_size ** 2).permute(0, 1, 3, 2).reshape(b, c, h, w, self.kernel_size ** 2) # b c*kernel**2,h*w ->  b c h w k**2
-        data_out = rearrange(receptive_field_data, 'b c h w (n1 n2) -> b c (h n1) (w n2)', n1=self.kernel_size,n2=self.kernel_size) # b c h w k**2 -> b c h*k w*k
-        conv_data = data_out * weight_out
-        conv_out = self.conv(conv_data)
-        return self.act(self.bn(conv_out))
-
  
-
 
 
 
