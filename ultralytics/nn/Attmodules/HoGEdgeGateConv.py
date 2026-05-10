@@ -136,7 +136,7 @@ class HoGEdgeGateConv(nn.Module):
         dirs_crop = gradient_dir[:, :, :H_cells*cell_h, :W_cells*cell_w]
 
         # [B, H_cells, W_cells, cell_h*cell*w]
-        dirs = dirs_crop.reshape(B, H_cells, W_cells, -1)
+        dirs = dirs_crop.view(B, H_cells, W_cells, -1)
         
         bin_with = torch.pi / self.nbins
         bin_indices = (dirs / bin_with).floor().long() 
