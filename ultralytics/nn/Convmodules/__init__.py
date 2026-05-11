@@ -26,3 +26,4 @@ from .C2f_RFA import C2fRFA
 from .C3_RFA import C3RFA
 from .C3_RFCA import C3RFCA
 from .C3_GhostTR import C3GhostTR
+from .C3_ECATR import C3ECATR
