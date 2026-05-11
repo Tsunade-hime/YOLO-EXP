@@ -275,9 +275,7 @@ class C3GhostTR(C3):
         """
         super().__init__(c1, c2, n, shortcut, g, e)
         c_ = int(c2 * e)
-        self.cv1 = GhostConv(c1, c_, 1, 1)  # 第一层卷积，1x1卷积
         self.cv2 = GhostConv(c1, c_, 1, 1)  # 第二层卷积，1x1卷积
-        self.cv3 = GhostConv(2 * c_, c2, 1)  # 第三层卷积，1x1卷积，连接后的结果会通过该卷积层输出
         self.m = TransformerBlock(c_, c_, 4, n)
 
 if __name__ == "__main__":
