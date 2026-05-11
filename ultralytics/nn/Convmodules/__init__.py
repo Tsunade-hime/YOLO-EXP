@@ -23,3 +23,4 @@ from .GMRConv import GMR_Conv2d
 from .C2f_GMR import C2fGMR
 from .C2f_RFCA import C2fRFCA
 from .C2f_RFA import C2fRFA
+from .C3_RFA import C3RFA
