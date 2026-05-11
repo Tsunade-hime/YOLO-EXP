@@ -3,7 +3,7 @@ import torch.nn as nn
 from typing import Tuple
 
 
-__all__ = ["C3TRExp"]
+__all__ = ["C3GhostTR"]
 
 def autopad(k, p=None, d=1):  # kernel, padding, dilation
     """Pad to 'same' shape outputs."""
