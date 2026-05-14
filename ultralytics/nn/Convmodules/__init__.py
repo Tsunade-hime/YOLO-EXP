@@ -28,3 +28,4 @@ from .C3_RFCA import C3RFCA
 from .C3_GhostTR import C3GhostTR
 from .C3_ECATR import C3ECATR
 from .C3_STR import C3STR
+from .C3k2_Sonic import SonicC3k2
