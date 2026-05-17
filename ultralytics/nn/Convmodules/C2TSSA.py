@@ -261,7 +261,7 @@ class C2PSAN(nn.Module):
 
         # 使用多个PSABlock模块，堆叠n个PSABlock模块
         self.m = nn.Sequential(*(PSABlock(self.c, attn_ratio=0.5,
-                                          num_heads=self.c // 64) for _ in range(n)))
+                                          num_heads=self.c // 128) for _ in range(n)))
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         # 使用cv1卷积层将输入张量分成两个部分
         a, b = self.cv1(x).split((self.c, self.c), dim=1)
