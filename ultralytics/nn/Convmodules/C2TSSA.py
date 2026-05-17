@@ -169,7 +169,7 @@ class PSABlock(nn.Module):
         super().__init__()
 
         # 多头注意力子层（位置/空间敏感），输入输出通道均为 c，头数为 num_heads
-        self.attn = AttentionTSSA(c, num_heads=num_heads)
+        self.attn = AttentionTSSA(c, num_heads=num_heads, qkv_bias=True)
         # 前馈网络：1x1 卷积升维到 2c，再用 1x1 卷积降回 c（第二层 act=False 表示无激活）
         self.ffn = nn.Sequential(Conv(c, c * 2, 1), Conv(c * 2, c, 1, act=False))
         # 是否启用残差（shortcut）连接；True 时执行 x + 子层(x)
@@ -261,7 +261,8 @@ class C2PSAN(nn.Module):
 
         # 使用多个PSABlock模块，堆叠n个PSABlock模块
         self.m = nn.Sequential(*(PSABlock(self.c, attn_ratio=0.5,
-                                          num_heads=self.c // 128) for _ in range(n)))
+                                          num_heads=self.c // 64) for _ in range(n)))
+        #self.c // 64  # 注意力头数根据隐藏通道数计算，确保每个头的维度合理
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         # 使用cv1卷积层将输入张量分成两个部分
         a, b = self.cv1(x).split((self.c, self.c), dim=1)
