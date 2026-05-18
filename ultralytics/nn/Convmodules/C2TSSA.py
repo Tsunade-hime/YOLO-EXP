@@ -169,7 +169,7 @@ class PSABlock(nn.Module):
         super().__init__()
 
         # 多头注意力子层（位置/空间敏感），输入输出通道均为 c，头数为 num_heads
-        self.attn = AttentionTSSA(c, num_heads=num_heads, qkv_bias=True)
+        self.attn = AttentionTSSA(c, num_heads=num_heads, qkv_bias=True, attn_drop=0.1, proj_drop=0.1)
         # 前馈网络：1x1 卷积升维到 2c，再用 1x1 卷积降回 c（第二层 act=False 表示无激活）
         self.ffn = nn.Sequential(Conv(c, c * 2, 1), Conv(c * 2, c, 1, act=False))
         # 是否启用残差（shortcut）连接；True 时执行 x + 子层(x)
