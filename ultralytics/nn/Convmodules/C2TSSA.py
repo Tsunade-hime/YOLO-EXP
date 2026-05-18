@@ -2,6 +2,8 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from einops import rearrange
+from timm.models.layers import DropPath
+from timm.models.vision_transformer import Mlp
 
 def to_3d(x):
     return rearrange(x, 'b c h w -> b (h w) c')
@@ -50,6 +52,36 @@ class AttentionTSSA(nn.Module):
     @torch.jit.ignore
     def no_weight_decay(self):
         return {'temp'}
+
+class Block(nn.Module):
+    def __init__(self, dim, num_heads, mlp_ratio=4., qkv_bias=False, qk_scale=None, drop=0.,
+                 attn_drop=0., drop_path=0., act_layer=nn.GELU, norm_layer=nn.LayerNorm,
+                 attn_layer=AttentionTSSA, num_tokens=196, eta=1.0):
+        super().__init__()
+        self.norm1 = norm_layer(dim)
+        self.attn = attn_layer(
+            dim, num_heads=num_heads, qkv_bias=qkv_bias, qk_scale=qk_scale, attn_drop=attn_drop,
+            proj_drop=drop
+        )
+        self.drop_path = DropPath(drop_path) if drop_path > 0. else nn.Identity()
+        self.norm2 = norm_layer(dim)
+
+        mlp_hidden_dim = int(dim * mlp_ratio)
+        self.mlp = Mlp(in_features=dim, hidden_features=mlp_hidden_dim, act_layer=act_layer,
+                       drop=drop)
+
+        # self.norm3 = norm_layer(dim)
+        # self.local_mp = LPI(in_features=dim, act_layer=act_layer)
+
+        self.gamma1 = nn.Parameter(eta * torch.ones(dim), requires_grad=True)
+        self.gamma2 = nn.Parameter(eta * torch.ones(dim), requires_grad=True)
+        # self.gamma3 = nn.Parameter(eta * torch.ones(dim), requires_grad=True)
+
+    def forward(self, x, H, W):
+        x = x + self.drop_path(self.gamma1 * self.attn(self.norm1(x)))
+        # x = x + self.drop_path(self.gamma3 * self.local_mp(self.norm3(x), H, W))
+        x = x + self.drop_path(self.gamma2 * self.mlp(self.norm2(x)))
+        return x
 
 def autopad(k, p=None, d=1):  # kernel, padding, dilation
     """Pad to 'same' shape outputs."""
@@ -169,7 +201,7 @@ class PSABlock(nn.Module):
         super().__init__()
 
         # 多头注意力子层（位置/空间敏感），输入输出通道均为 c，头数为 num_heads
-        self.attn = AttentionTSSA(c, num_heads=num_heads, qkv_bias=True)
+        self.attn = Attention(c, attn_ratio=attn_ratio, num_heads=num_heads)
         # 前馈网络：1x1 卷积升维到 2c，再用 1x1 卷积降回 c（第二层 act=False 表示无激活）
         self.ffn = nn.Sequential(Conv(c, c * 2, 1), Conv(c * 2, c, 1, act=False))
         # 是否启用残差（shortcut）连接；True 时执行 x + 子层(x)
@@ -241,7 +273,7 @@ class PSA(nn.Module):
         return self.cv2(torch.cat((a, b), 1))
 
 
-class C2PSAN(nn.Module):
+class C2TSSA(nn.Module):
     """
     该模块本质上与PSA模块相同，但进行了重构，以允许堆叠更多的PSABlock模块。
     """
@@ -260,21 +292,28 @@ class C2PSAN(nn.Module):
         self.cv2 = Conv(2 * self.c, c1, 1)  # 第二个1x1卷积，恢复通道数
 
         # 使用多个PSABlock模块，堆叠n个PSABlock模块
-        self.m = nn.Sequential(*(PSABlock(self.c, attn_ratio=0.5,
-                                          num_heads=self.c // 128) for _ in range(n)))
+        self.m = nn.Sequential(*(Block(self.c, num_heads=self.c // 64) for _ in range(n)))
         #self.c // 64  # 注意力头数根据隐藏通道数计算，确保每个头的维度合理
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         # 使用cv1卷积层将输入张量分成两个部分
         a, b = self.cv1(x).split((self.c, self.c), dim=1)
-        # 将b部分通过PSABlock模块进行处理
-        b = self.m(b)
+        
+        # 在转换为3d前获取H和W
+        _, _, H, W = b.shape
+        
+        # 将b部分转换为3d并通过Block模块进行处理
+        b = to_3d(b)
+        for block in self.m:
+            b = block(b, H, W)
+        b = to_4d(b, H, W)
+        
         # 将a和处理后的b拼接在一起，并通过cv2卷积层得到输出
         return self.cv2(torch.cat((a, b), 1))
     
 if __name__ == "__main__":
     x = torch.randn(1, 256, 40, 40)
 
-    model = C2PSAN(c1=256, c2=256, n=2, e=0.5)
+    model = C2TSSA(c1=256, c2=256, n=2, e=0.5)
     y = model(x)
 
     print("input shape :", x.shape)  # [1, 256, 40, 40]
