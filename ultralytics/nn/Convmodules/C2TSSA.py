@@ -292,7 +292,8 @@ class C2TSSA(nn.Module):
         self.cv2 = Conv(2 * self.c, c1, 1)  # 第二个1x1卷积，恢复通道数
 
         # 使用多个PSABlock模块，堆叠n个PSABlock模块
-        self.m = nn.Sequential(*(Block(self.c, num_heads=self.c // 64) for _ in range(n)))
+        self.m = nn.Sequential(*(Block(self.c, num_heads=self.c // 64, drop=0.1, 
+                                       attn_drop=0.1, drop_path=0.05) for _ in range(n)))
         #self.c // 64  # 注意力头数根据隐藏通道数计算，确保每个头的维度合理
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         # 使用cv1卷积层将输入张量分成两个部分
