@@ -6,7 +6,7 @@ bytes: 24547332
 url: https://platform.ultralytics.com/tsunade/datasets/neu-det
 version: latest
 created_at: '2026-06-04T06:36:46.862Z'
-updated_at: '2026-06-04T06:45:12.576Z'
+updated_at: '2026-06-04T07:56:32.261Z'
 names:
   0: Cr
   1: In
@@ -14,5 +14,6 @@ names:
   3: PS
   4: RS
   5: Sc
+test: images/test
 train: images/train
 val: images/val
