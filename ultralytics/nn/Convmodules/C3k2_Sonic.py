@@ -622,8 +622,8 @@ class SonicBottleneck(nn.Module):
         """
         super().__init__()
         c_ = int(c2 * e)  # hidden channels
-        self.cv1 = Sonic(c1, c_, blockdiag_per_channel=True, dropout_p=0.15)
-        self.cv2 = Sonic(c_, c2, blockdiag_per_channel=True, dropout_p=0.15)
+        self.cv1 = Sonic(c1, c_)
+        self.cv2 = Sonic(c_, c2)
         self.add = shortcut and c1 == c2
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
