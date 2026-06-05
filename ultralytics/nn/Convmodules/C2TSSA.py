@@ -293,7 +293,7 @@ class C2TSSA(nn.Module):
 
         # 使用多个PSABlock模块，堆叠n个PSABlock模块
         self.m = nn.Sequential(*(Block(self.c, num_heads=self.c // 64, drop=0.2, 
-                                       attn_drop=0.2, drop_path=0.4) for _ in range(n)))
+                                       attn_drop=0.2, drop_path=0.2) for _ in range(n)))
         #self.c // 64  # 注意力头数根据隐藏通道数计算，确保每个头的维度合理
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         # 使用cv1卷积层将输入张量分成两个部分
