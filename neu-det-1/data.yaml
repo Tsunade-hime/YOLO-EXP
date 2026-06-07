@@ -1,0 +1,19 @@
+type: dataset
+task: detect
+name: NEU DET
+description: ''
+bytes: 24547332
+url: https://platform.ultralytics.com/tsunade/datasets/neu-det
+version: latest
+created_at: '2026-06-04T12:04:29.375Z'
+updated_at: '2026-06-05T12:06:24.306Z'
+names:
+  0: crazing
+  1: inclusion
+  2: patches
+  3: pitted_surface
+  4: rolled-in_scale
+  5: scratches
+test: images/test
+train: images/train
+val: images/val
