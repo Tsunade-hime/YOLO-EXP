@@ -1,0 +1,23 @@
+type: dataset
+task: detect
+name: GC10 DET
+description: ''
+bytes: 884240519
+url: https://platform.ultralytics.com/tsunade/datasets/gc10-det
+version: latest
+created_at: '2026-06-07T14:22:37.380Z'
+updated_at: '2026-06-08T10:53:36.388Z'
+names:
+  0: 1_chongkong
+  1: 2_hanfeng
+  2: 3_yueyawan
+  3: 4_shuiban
+  4: 5_youban
+  5: 6_siban
+  6: 7_yiwu
+  7: 8_yahen
+  8: 9_zhehen
+  9: 10_yaozhe
+test: images/test
+train: images/train
+val: images/val
